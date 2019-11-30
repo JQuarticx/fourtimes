@@ -6,7 +6,8 @@ env:
     - ID=$(git rev-parse HEAD)
     - CLOUDSDK_CORE_DISABLE_PROMPTS=1
 before_install:
-  #- openssl aes-256-cbc -K $encrypted_0c35eebf403c_key -iv $encrypted_0c35eebf403c_iv -in docker-235005-18c61dab6682.json.enc -out docker-235005-18c61dab6682.json -d
+  - gem install rake
+  - openssl aes-256-cbc -K $encrypted_0c35eebf403c_key -iv $encrypted_0c35eebf403c_iv -in docker-235005-18c61dab6682.json.enc -out docker-235005-18c61dab6682.json -d
   - curl https://sdk.cloud.google.com | bash > /dev/null;
   - source $HOME/google-cloud-sdk/path.bash.inc
   - gcloud componenets update kubectl
@@ -20,6 +21,6 @@ script:
   - docker run jjino/development echo "jino" -- --coverage
 deploy:
   provider: script
-    script: bash deploy.sh
+    script: bash ./deploy.sh
     on:
       branch: master
