@@ -1,0 +1,34 @@
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: radiant-deployment
+spec:
+  strategy:
+    type: RollingUpdate
+    rollingUpdate:
+      maxSurge: 2
+      maxUnavailable: 1
+  revisionHistoryLimit: 4
+  paused: false
+  replicas: 2
+  minReadySeconds: 10
+  selector:
+    matchLabels:
+      role: webserver
+    matchExpressions:
+      - {key: version, operator: In, values: [v1, v2, v3]}
+  template:
+    metadata:
+      name: web
+      labels:
+        role: webserver
+        version: v1
+        tier: frond-end
+    spec:
+      containers:
+        - name: web
+          image: jjino/radiant:latest
+          ports:
+            - containerPort: 80
+              protocol: TCP
